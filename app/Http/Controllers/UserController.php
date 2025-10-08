@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Helper\JWTToken;
-use App\Http\Controllers\Controller;
-use App\Mail\OTPMail;
-use App\Models\User;
 use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
+use App\Models\User;
 use Inertia\Inertia;
+use App\Mail\OTPMail;
+use App\Helper\JWTToken;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
@@ -81,10 +82,13 @@ class UserController extends Controller
 
     public function UserLogout()
     {
-        return response()->json([
-            'status' => 'success',
-            'message' => "User logout successfull"
-        ], 200)->cookie('token', '', -1);
+        // return response()->json([
+        //     'status' => 'success',
+        //     'message' => "User logout successfull"
+        // ], 200)->cookie('token', '', -1);
+        Session::flush();
+        $data = ['message' => 'User logout successfull', 'status' => true,  'error' => ''];
+        return redirect('/login')->with($data);
     }
 
     public function SendOtpCode(Request $request)
@@ -209,15 +213,22 @@ class UserController extends Controller
         ]);
 
         if ($user_email !== $new_email) {
-            return response()->json([
-                'status' => 'success',
-                'meesage' => "User updated successfull, you have been logged out due to email change"
-            ])->cookie('token', '', -1);
+            // return response()->json([
+            //     'status' => 'success',
+            //     'meesage' => "User updated successfull, you have been logged out due to email change"
+            // ])->cookie('token', '', -1);
+            Session::flush();
+            return inertia::location('/login');
         }
 
-        return response()->json([
-            'status' => 'success',
-            'meesage' => "User updated successfull"
+        // return response()->json([
+        //     'status' => 'success',
+        //     'meesage' => "User updated successfull"
+        // ]);
+        return redirect()->back()->with([
+            'status' => true,
+            'message' => 'User updated successfull',
+            'error' => ''
         ]);
     }
 
@@ -244,5 +255,12 @@ class UserController extends Controller
     public function ResetPasswordPage()
     {
         return Inertia::render('ResetPasswordPage');
+    }
+
+    public function ProfilePage(Request $request)
+    {
+        $user_id = $request->header('user_id');
+        $user = User::where('id', $user_id)->first();
+        return Inertia::render('ProfilePage', ['user' => $user]);
     }
 }

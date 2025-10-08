@@ -42,15 +42,15 @@
                 <span class="side-bar-item-caption">Invoice</span>
             </Link>
 
-            <a href="profileForm.html" class="side-bar-item">
+            <Link href="/profile_page" class="side-bar-item">
                 <span class="side-bar-item-icon"><i class="fa fa-user-circle text-green"></i></span>
                 <span class="side-bar-item-caption">Profile</span>
-            </a>
+            </Link>
 
-            <a href="" class="side-bar-item">
+            <Link href="/user_logout" class="side-bar-item">
                 <span class="side-bar-item-icon"><i class="fa fa-sign-out-alt text-green"></i></span>
                 <span class="side-bar-item-caption">Logout</span>
-            </a>
+            </Link>
 
         </div>
         <div id="content" class="content">

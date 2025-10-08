@@ -15,10 +15,11 @@ class InvoiceController extends Controller
 {
     public function invoiceCreate(Request $request)
     {
+        // dd($request->all());
         DB::beginTransaction();
 
         try {
-            $user_id = $request->header('id');
+            $user_id = $request->header('user_id');
             $data = [
                 'user_id' => $user_id,
                 'customer_id' => $request->input('customer_id'),
@@ -40,10 +41,15 @@ class InvoiceController extends Controller
                     ], 404);
                 }
                 if ($existUnit->unit < $product['unit']) {
-                    return response()->json([
-                        'status' => 'failed',
+                    // return response()->json([
+                    //     'status' => 'failed',
+                    //     'message' => "Only {$existUnit->unit} Units available for product with ID {$product['id']}"
+                    // ]);
+                    $data = [
+                        'status' => false,
                         'message' => "Only {$existUnit->unit} Units available for product with ID {$product['id']}"
-                    ]);
+                    ];
+                    return redirect('invoice_list_page')->with($data);
                 }
 
                 InvoiceProduct::create([
@@ -60,10 +66,18 @@ class InvoiceController extends Controller
             }
             DB::commit();
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Invoice created successfull'
-            ]);
+            // return response()->json([
+            //     'status' => 'success',
+            //     'message' => 'Invoice created successfull'
+            // ]);
+
+            $data = [
+                'status' => true,
+                'message' => 'Invoice created successfull',
+                'error' => ''
+            ];
+            return redirect('invoice_list_page')->with($data);
+
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json([

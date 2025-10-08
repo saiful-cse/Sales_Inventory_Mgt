@@ -18,7 +18,7 @@ Route::get('/', [HomeController::class, 'Home'])->name('home');
 Route::post('/user_registration', [UserController::class, 'userRegistration'])->name('userRegistration');
 Route::post('/user_login', [UserController::class, 'UserLogin'])->name('UserLogin');
 
-Route::get('/user_logout', [UserController::class, 'UserLogout'])->name('UserLogout');
+//Route::get('/user_logout', [UserController::class, 'UserLogout'])->name('UserLogout');
 Route::get('/dashboard', [DashboardController::class, 'Dashboard'])->middleware([SessionAuthenticate::class])->name('Dashboard');
 
 Route::post('/send-otp', [UserController::class, 'SendOtpCode'])->name('send_otp');
@@ -36,7 +36,6 @@ Route::middleware(SessionAuthenticate::class)->group(function () {
         Route::get('/category_delete/{id}', [CategoryController::class, 'CategoryDelete'])->name('category_delete');
         Route::get('/category_page', [CategoryController::class, 'CategoryPage'])->name('category.page');
         Route::get('/category_save_page', [CategoryController::class, 'CategorySavePage'])->name('categorySavePage');
-
     });
 
     //Product all routes
@@ -48,7 +47,6 @@ Route::middleware(SessionAuthenticate::class)->group(function () {
         Route::get('/product_delete/{id}', [ProductController::class, 'productDelete'])->name('product_delete');
         Route::get('/product_page', [ProductController::class, 'ProductPage'])->name('product_page');
         Route::get('/product_save_page', [ProductController::class, 'ProductSavePage'])->name('product_save_page');
-
     });
 
     //customer all routes
@@ -60,7 +58,6 @@ Route::middleware(SessionAuthenticate::class)->group(function () {
         Route::get('/customer_delete/{id}', [CustomerController::class, 'customerDelete'])->name('customer.delete');
         Route::get('/customer_page', [CustomerController::class, 'CustomerPage'])->name('customer_page');
         Route::get('/customer_save_page', [CustomerController::class, 'CustomerSavePage'])->name('customer_save_page');
-
     });
 
     //invoice all routes
@@ -78,6 +75,10 @@ Route::middleware(SessionAuthenticate::class)->group(function () {
     Route::post('/user_update', [UserController::class, 'UserUpdate'])->name('user.update');
 
     Route::get('/create_sale', [SaleController::class, 'SalePage'])->name('create_sale');
+    Route::get('/profile_page', [UserController::class, 'ProfilePage'])->name('profile_page');
+    Route::get('/user_logout', [UserController::class, 'UserLogout'])->name('UserLogout');
+
+    
 });
 
 //Frontend all routes
